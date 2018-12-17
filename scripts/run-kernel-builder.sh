@@ -1,16 +1,20 @@
 #!/bin/bash
 
+set -eu
+
+BUILDID=$(uuidgen)
 RPMBUILDDIR=/home/builder/rpmbuild
-BUILDVOL=kernelbuild-$(uuidgen)
+BUILDVOL=kernelbuild-$BUILDID
 
 mkdir -p RPMS
 
-docker build --no-cache -t fedora-kernel-builder .
+docker build --no-cache -t fedora-kernel-builder:$BUILDID .
 docker volume create $BUILDVOL
 docker run \
   --rm \
   -v $(pwd)/PATCHES:$RPMBUILDDIR/PATCHES \
   -v $(pwd)/RPMS:$RPMBUILDDIR/RPMS \
   -v $BUILDVOL:$RPMBUILDDIR/BUILD \
-  fedora-kernel-builder
+  fedora-kernel-builder:$BUILDID
 docker volume rm $BUILDVOL
+docker image rm fedora-kernel-builder:$BUILDID
