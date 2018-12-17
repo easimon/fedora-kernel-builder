@@ -5,4 +5,4 @@ cache:
   - "$HOME/rpmbuild/SRPMS"
 
 script:
-- "./scripts/run-kernel-builder.sh"
+- travis_wait 30 ./scripts/run-kernel-builder.sh
