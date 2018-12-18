@@ -1,3 +1,4 @@
+language: minimal
 services:
 - docker
 cache:
@@ -5,4 +6,4 @@ cache:
   - "$HOME/rpmbuild/SRPMS"
 
 script:
-- travis_wait 30 ./scripts/run-kernel-builder.sh
+- ./scripts/run-kernel-builder.sh
