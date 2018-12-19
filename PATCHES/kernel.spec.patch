@@ -14,7 +14,7 @@
  
  %if %{with_verbose}
 -%define make_opts V=1
-+%define make_opts
++%define make_opts %{nil}
  %else
  %define make_opts -s
  %endif
