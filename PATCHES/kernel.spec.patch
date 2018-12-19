@@ -1,5 +1,5 @@
---- a/kernel.spec	2018-12-08 16:34:39.000083627 +0100
-+++ b/kernel.spec	2018-12-08 16:36:27.817127736 +0100
+--- a/kernel.spec	2018-12-10 16:16:23.000000000 +0100
++++ b/kernel.spec	2018-12-19 11:17:33.601723037 +0100
 @@ -24,7 +24,7 @@
  %global zipsed -e 's/\.ko$/\.ko.xz/'
  %endif
@@ -9,9 +9,18 @@
  
  # baserelease defines which build revision of this kernel version we're
  # building.  We used to call this fedora_build, but the magical name
-@@ -640,6 +640,8 @@
- # https://patchwork.freedesktop.org/patch/259364/
- Patch515: PCI-Fix-incorrect-value-returned-from-pcie_get_speed.patch
+@@ -133,7 +133,7 @@
+ %endif
+ 
+ %if %{with_verbose}
+-%define make_opts V=1
++%define make_opts
+ %else
+ %define make_opts -s
+ %endif
+@@ -633,6 +633,8 @@
+ # CVE-2018-19824 rhbz 1655816 1655817
+ Patch518: alsa-usb-audio-fix-UAF-decrement-if-card-has-no-live.patch
  
 +Patch603: disable-ryzen-dma-reset.diff
 +
