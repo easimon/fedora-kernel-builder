@@ -24,7 +24,10 @@ RUN dnf update -y && dnf install -y \
   hostname \
   kmod \
   make \
-  net-tools
+  net-tools \
+  dwarves \
+  nss-tools \
+  python3-devel
 
 RUN groupadd -g 1000 -r ${DOCKERUSER} \
   && useradd -g 1000 -r -u 1000 -m ${DOCKERUSER}
