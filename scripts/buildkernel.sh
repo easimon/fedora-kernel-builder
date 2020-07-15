@@ -16,4 +16,4 @@ pushd $HOME/rpmbuild/SRPMS \
 #  && time rpmbuild -bb --with verbose --without debuginfo --without debug --target=$(uname -m) kernel.spec ; popd
 
 pushd $HOME/rpmbuild/SPECS \
-  && time rpmbuild -bb --with verbose --without debuginfo --without debug --target=$(uname -m) kernel.spec ; popd
+  && time rpmbuild -bb --without verbose --without debuginfo --without debug --target=$(uname -m) kernel.spec ; popd
