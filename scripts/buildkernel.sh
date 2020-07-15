@@ -6,7 +6,7 @@ pushd $HOME/rpmbuild/SRPMS \
   && dnf download --source kernel \
   && rpm -i kernel*rpm ; popd
 
-cp $HOME/rpmbuild/PATCHES/*.diff $HOME/rpmbuild/SOURCES/
+#cp $HOME/rpmbuild/PATCHES/*.diff $HOME/rpmbuild/SOURCES/
 
 #pushd $HOME/rpmbuild/SPECS \
 #  && patch -p1 < ../PATCHES/kernel.spec.patch \
