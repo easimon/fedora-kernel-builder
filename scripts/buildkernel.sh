@@ -2,6 +2,9 @@
 
 set -eu
 
+fdisk -l
+df -h
+
 pushd $HOME/rpmbuild/SRPMS \
   && dnf download --source kernel \
   && rpm -i kernel*rpm ; popd
