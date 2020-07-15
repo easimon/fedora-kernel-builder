@@ -1,4 +1,4 @@
-FROM fedora:28
+FROM fedora:31
 
 ARG DOCKERUSERUID=1000
 ARG DOCKERUSERGID=1000
@@ -19,7 +19,7 @@ RUN dnf update -y && dnf install -y \
   perl-generators \
   bc \
   gcc \
-  git \ 
+  git \
   hmaccalc \
   hostname \
   kmod \
@@ -36,7 +36,7 @@ RUN rpmdev-setuptree
 
 COPY ./scripts/buildkernel.sh /usr/local/bin/
 
-VOLUME [ "${USERHOME}/rpmbuild/BUILD" ] 
+VOLUME [ "${USERHOME}/rpmbuild/BUILD" ]
 VOLUME [ "${USERHOME}/rpmbuild/PATCHES" ]
 VOLUME [ "${USERHOME}/rpmbuild/RPMS" ]
 

@@ -5,7 +5,7 @@
  %endif
  
 -# define buildid .local
-+%define buildid .fixdvb
++%define buildid .easimon
  
  # baserelease defines which build revision of this kernel version we're
  # building.  We used to call this fedora_build, but the magical name
@@ -17,13 +17,4 @@
 +%define make_opts %{nil}
  %else
  %define make_opts -s
- %endif
-@@ -633,6 +633,8 @@
- # CVE-2018-19824 rhbz 1655816 1655817
- Patch518: alsa-usb-audio-fix-UAF-decrement-if-card-has-no-live.patch
- 
-+Patch603: disable-ryzen-dma-reset.diff
-+
- # END OF PATCH DEFINITIONS
- 
  %endif
