@@ -11,6 +11,7 @@ RPMBUILDDIR=/home/builder/rpmbuild
 BUILDVOL=kernelbuild-$BUILDID
 
 mkdir -p RPMS SRPMS BUILD
+chmod a+w RPMS SRPMS BUILD
 
 docker build --no-cache -t fedora-kernel-builder:$BUILDID .
 docker volume create $BUILDVOL
