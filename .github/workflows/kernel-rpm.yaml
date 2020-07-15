@@ -1,0 +1,14 @@
+name: Kernel build
+on: push
+
+jobs:
+  build-kernel:
+    name: Build kernel RPM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@master
+
+      - name: Build the kernel
+        run: |
+          ./scripts/run-kernel-builder.sh
