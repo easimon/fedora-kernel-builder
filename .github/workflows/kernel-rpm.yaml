@@ -5,6 +5,7 @@ jobs:
   build-kernel:
     name: Build kernel RPM
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - name: Modify disk and swap layout in favor of more space for docker
         run: |
@@ -46,3 +47,4 @@ jobs:
         run: |
           df -h
           sudo du -sh /var/lib/docker
+          ls -al RPMS SRPMS BUILD
