@@ -13,14 +13,15 @@ BUILDVOL=kernelbuild-$BUILDID
 mkdir -p RPMS SRPMS BUILD
 chmod a+w RPMS SRPMS BUILD
 
-docker build --no-cache -t fedora-kernel-builder:$BUILDID .
+docker build -t fedora-kernel-builder:$BUILDID .
 docker volume create $BUILDVOL
 
 docker run \
+  -ti \
   --rm \
   -v $(pwd)/PATCHES:$RPMBUILDDIR/PATCHES \
   -v $(pwd)/RPMS:$RPMBUILDDIR/RPMS \
-  -v $(pwd)/BUILD:$RPMBUILDDIR/BUILD \
+  -v $BUILDVOL:$RPMBUILDDIR/BUILD \
   fedora-kernel-builder:$BUILDID
 docker volume rm $BUILDVOL
 docker image rm fedora-kernel-builder:$BUILDID

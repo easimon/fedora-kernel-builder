@@ -37,7 +37,7 @@ WORKDIR ${USERHOME}
 
 RUN rpmdev-setuptree
 
-COPY ./scripts/buildkernel.sh /usr/local/bin/
+COPY ./docker-scripts/buildkernel.sh /usr/local/bin/
 
 VOLUME [ "${USERHOME}/rpmbuild/BUILD" ]
 VOLUME [ "${USERHOME}/rpmbuild/PATCHES" ]

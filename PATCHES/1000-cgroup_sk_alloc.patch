@@ -1,0 +1,27 @@
+From: markus.dobel@gmail.com
+Subject: fix kernel panic 
+
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 06b5ea9..4664faf 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -6447,9 +6447,6 @@ void cgroup_sk_alloc_disable(void)
+ 
+ void cgroup_sk_alloc(struct sock_cgroup_data *skcd)
+ {
+-	if (cgroup_sk_alloc_disabled)
+-		return;
+-
+ 	/* Socket clone path */
+ 	if (skcd->val) {
+ 		/*
+@@ -6462,6 +6459,9 @@ void cgroup_sk_alloc(struct sock_cgroup_data *skcd)
+ 		return;
+ 	}
+ 
++	if (cgroup_sk_alloc_disabled)
++		return;
++
+ 	/* Don't associate the sock with unrelated interrupted task's cgroup. */
+ 	if (in_interrupt())
+ 		return;

@@ -1,0 +1,19 @@
+--- a/kernel.spec	2020-07-17 19:00:01.000000000 +0200
++++ b/kernel.spec	2020-07-21 09:20:32.935588541 +0200
+@@ -54,6 +54,7 @@
+ %endif
+
+ # define buildid .local
++%define buildid .easimon
+
+ %if 0%{?fedora}
+ %define primary_target fedora
+@@ -883,6 +884,8 @@
+ # Killer wireless headed to stable
+ Patch125: iwlwifi-make-some-killer-wireless-ac-1550-cards-work-again.patch
+
++Patch1000: 1000-cgroup_sk_alloc.patch
++
+ # END OF PATCH DEFINITIONS
+
+ %endif
