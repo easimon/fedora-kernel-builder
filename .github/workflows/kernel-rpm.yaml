@@ -9,6 +9,9 @@ jobs:
     steps:
       - name: Modify disk and swap layout in favor of more space for docker
         run: |
+          sudo systemctl stop docker
+          sudo rm -rf /var/lib/docker && sudo mkdir -p /var/lib/docker
+
           export TMP_DEV=$(df --output=source  /mnt/ | tail -1)
           export FREE_RESERVE_KB=$(expr 512 \* 1024)
           export ROOT_FREE_KB=$(df --block-size=1024 --output=avail / | tail -1)
@@ -29,12 +32,10 @@ jobs:
           sudo lvcreate -l100%FREE -n buildlv buildvg
 
           sudo mkfs.ext4 /dev/mapper/buildvg-buildlv
-          sudo systemctl stop docker
           sudo mount /dev/mapper/buildvg-buildlv /var/lib/docker
           sudo systemctl start docker
 
-          systemctl show -p FragmentPath docker.service
-          systemctl show docker.service
+          df -h
 
       - name: Check out repository
         uses: actions/checkout@master
