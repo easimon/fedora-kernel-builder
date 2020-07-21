@@ -7,47 +7,23 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - name: Modify disk and swap layout in favor of more space for docker
-        run: |
-          sudo systemctl stop docker
-          sudo rm -rf /var/lib/docker && sudo mkdir -p /var/lib/docker
-
-          export TMP_DEV=$(df --output=source  /mnt/ | tail -1)
-          export FREE_RESERVE_KB=$(expr 512 \* 1024)
-          export ROOT_FREE_KB=$(df --block-size=1024 --output=avail / | tail -1)
-          export ROOT_LVM_SIZE_KB=$(expr $ROOT_FREE_KB - $FREE_RESERVE_KB)
-          export ROOT_LVM_SIZE_BYTES=$(expr $ROOT_LVM_SIZE_KB \* 1024)
-
-          sudo swapoff -a
-          sudo umount /mnt
-          sudo touch /pv
-          sudo fallocate -z -l $ROOT_LVM_SIZE_BYTES /pv
-          export ROOT_LOOP_DEV=$(sudo losetup --find --show /pv)
-
-          sudo pvcreate -f $TMP_DEV $ROOT_LOOP_DEV
-          sudo vgcreate buildvg $TMP_DEV $ROOT_LOOP_DEV
-
-          #sudo lvcreate -L2G -n swap buildvg
-          #sudo mkswap /dev/mapper/buildvg-swap
-          #sudo swapon /dev/mapper/buildvg-swap
-
-          sudo lvcreate -l100%FREE -n buildlv buildvg
-
-          sudo mkfs.ext4 /dev/mapper/buildvg-buildlv
-          sudo mount /dev/mapper/buildvg-buildlv /var/lib/docker
-          sudo systemctl start docker
-
-          df -h
-
       - name: Check out repository
         uses: actions/checkout@master
 
       - name: Build the kernel
         run: |
-          ./scripts/run-kernel-builder.sh
+          ./scripts/prepare-github-builder.sh
+          ./scripts/run-kernel-builder-github.sh
 
       - name: Short system report
         run: |
           df -h
           sudo du -sh /var/lib/docker
           ls -al RPMS SRPMS BUILD
+
+      - name: Upload RPMS as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: kernel-rpms
+          path: |
+            RPMS/**/*
