@@ -17,7 +17,6 @@ docker build -t fedora-kernel-builder:$BUILDID .
 docker volume create $BUILDVOL
 
 docker run \
-  -ti \
   --rm \
   -v $(pwd)/PATCHES:$RPMBUILDDIR/PATCHES \
   -v $(pwd)/RPMS:$RPMBUILDDIR/RPMS \
