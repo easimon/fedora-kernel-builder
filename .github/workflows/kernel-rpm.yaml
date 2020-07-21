@@ -16,10 +16,12 @@ jobs:
           export FREE_RESERVE_KB=$(expr 512 \* 1024)
           export ROOT_FREE_KB=$(df --block-size=1024 --output=avail / | tail -1)
           export ROOT_LVM_SIZE_KB=$(expr $ROOT_FREE_KB - $FREE_RESERVE_KB)
+          export ROOT_LVM_SIZE_BYTES=$(expr $ROOT_LVM_SIZE_KB \* 1024)
 
           sudo swapoff -a
           sudo umount /mnt
-          sudo dd if=/dev/zero of=/pv bs=1024 count=0 seek=$ROOT_LVM_SIZE_KB
+          sudo touch /pv
+          sudo fallocate -z -l $ROOT_LVM_SIZE_BYTES /pv
           export ROOT_LOOP_DEV=$(sudo losetup --find --show /pv)
 
           sudo pvcreate -f $TMP_DEV $ROOT_LOOP_DEV
