@@ -6,9 +6,43 @@ jobs:
     name: Build kernel RPM
     runs-on: ubuntu-latest
     steps:
+      - name: Modify disk and swap layout in favor of more space for docker
+        run: |
+          export TMP_DEV=$(df --output=source  /mnt/ | tail -1)
+          export FREE_RESERVE_KB=$(expr 512 \* 1024)
+          export ROOT_FREE_KB=$(df --block-size=1024 --output=avail / | tail -1)
+          export ROOT_LVM_SIZE_KB=$(expr $ROOT_FREE_KB - $FREE_RESERVE_KB)
+
+          sudo swapoff -a
+          sudo umount /mnt
+          sudo dd if=/dev/zero of=/pv bs=1024 count=0 seek=$ROOT_LVM_SIZE_KB
+          export ROOT_LOOP_DEV=$(sudo losetup --find --show /pv)
+
+          sudo pvcreate -f $TMP_DEV $ROOT_LOOP_DEV
+          sudo vgcreate buildvg $TMP_DEV $ROOT_LOOP_DEV
+
+          #sudo lvcreate -L2G -n swap buildvg
+          #sudo mkswap /dev/mapper/buildvg-swap
+          #sudo swapon /dev/mapper/buildvg-swap
+
+          sudo lvcreate -l100%FREE -n buildlv buildvg
+
+          sudo mkfs.ext4 /dev/mapper/buildvg-buildlv
+          sudo systemctl stop docker
+          sudo mount /dev/mapper/buildvg-buildlv /var/lib/docker
+          sudo systemctl start docker
+
+          systemctl show -p FragmentPath docker.service
+          systemctl show docker.service
+
       - name: Check out repository
         uses: actions/checkout@master
 
       - name: Build the kernel
         run: |
           ./scripts/run-kernel-builder.sh
+
+      - name: Short system report
+        run: |
+          df -h
+          sudo du -sh /var/lib/docker
