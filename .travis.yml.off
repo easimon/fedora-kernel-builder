@@ -1,9 +1,0 @@
-language: minimal
-services:
-- docker
-cache:
-  directories:
-  - "$HOME/rpmbuild/SRPMS"
-
-script:
-- ./scripts/run-kernel-builder.sh
